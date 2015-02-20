@@ -61,13 +61,12 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		command = command + " " + __argv[i];
 	}
 
-	//printf("Starting %s\n", command.c_str());
 	// Start the child process. 
 	if (!CreateProcessA(NULL,   // No module name (use command line)
 		LPSTR(command.c_str()),        // Command line
 		NULL,           // Process handle not inheritable
 		NULL,           // Thread handle not inheritable
-		FALSE,          // Set handle inheritance to FALSE
+		TRUE,          // Set handle inheritance to FALSE
 		0,              // No creation flags
 		NULL,           // Use parent's environment block
 		NULL,           // Use parent's starting directory 
@@ -78,13 +77,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		printf("CreateProcess failed (%d).\n", GetLastError());
 		return 1;
 	}
-
-	// Wait until child process exits.
-	WaitForSingleObject(pi.hProcess, INFINITE);
-
-	// Close process and thread handles. 
-	CloseHandle(pi.hProcess);
-	CloseHandle(pi.hThread);
 
 	return 0;
 }
