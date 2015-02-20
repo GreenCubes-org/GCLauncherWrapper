@@ -1,13 +1,14 @@
-// GCLauncherWrapper.cpp : Defines the entry point for the console application.
+// GCLauncherWrapper.cpp : Defines the entry point for the application.
 //
 
 #include "stdafx.h"
+#include "GCLauncherWrapper.h"
 
 typedef BOOL(WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
 
 // You can specify here paths to your JREs.
-std::string java64 = ".\\jre\\64\\bin\\javaw.exe";
-std::string java32 = ".\\jre\\32\\bin\\javaw.exe";
+std::string java64 = "jre\\64\\bin\\javaw.exe";
+std::string java32 = "jre\\32\\bin\\javaw.exe";
 
 // Specify parameters to pass to JRE. All arguments
 // passed to wrapper will be passed too
@@ -32,8 +33,11 @@ BOOL IsWow64()
 	return bIsWow64;
 }
 
-int main(int argc, char* argv[])
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+
 	std::string javaExe;
 	if (IsWow64())
 	{
@@ -52,9 +56,9 @@ int main(int argc, char* argv[])
 
 	std::string command;
 	command = javaExe + " " + launchParams;
-	for (int i = 1; i < argc; ++i)
+	for (int i = 1; i < __argc; ++i)
 	{
-		command = command + " " + argv[i];
+		command = command + " " + __argv[i];
 	}
 
 	//printf("Starting %s\n", command.c_str());
@@ -84,5 +88,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
-
